@@ -21,6 +21,11 @@ bot_prefix= "!"
 bot = commands.Bot(command_prefix=bot_prefix)
 bot.remove_command('help')
 
+with open('/home/pi/Spotty/secrets.txt', 'r') as f:
+    client_id = f.readline().replace('\n', '')
+    client_secret = f.readline().replace('\n', '')
+    bot_token = f.readline().replace('\n', '')
+
 @bot.event
 async def on_ready():
     print("Bot Online!")
@@ -30,9 +35,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name='Spot.py Bot'))
 
     global sp
-    with open('/home/pi/Spotty/secrets.txt', 'r') as f:
-        client_id = f.readline().replace('\n', '')
-        client_secret = f.readline().replace('\n', '')
+    
     token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri='http://localhost:8888/callback')  # z4m7ayxl6bzz5i9zjp0bz8133 doodads
     if token:
         sp = spotipy.Spotify(auth=token)
@@ -319,4 +322,4 @@ def remove_live_tracks(from_playlist, to_playlist):
     for i, trk in enumerate(trks):
         print(trk)
 
-bot.run("Njk3NTgwODg4NTM1MzM0OTUy.Xo5XJg.giZxghxqmA44e-94pbOxWtl7eeE")
+bot.run(bot_token)
